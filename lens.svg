@@ -1,0 +1,16 @@
+<svg id="lens.svg" xmlns="http://www.w3.org/2000/svg" width="233" height="232" viewBox="0 0 233 232">
+  <defs>
+    <style>
+      .cls-1 {
+        fill-rule: evenodd;
+        mix-blend-mode: multiply;
+      }
+
+      .cls-2 {
+        fill: red;
+      }
+    </style>
+  </defs>
+  <path class="cls-1" d="M513,345c-17.673,0-17.291-11.986-32-32-8.838-9.308-12.927-18.305-13.409-25.706a97.125,97.125,0,1,1,18.266-18.147c7.568,0.246,16.955,3.8,27.143,11.853,17,13.375,32,14.327,32,32A32,32,0,0,1,513,345Z" transform="translate(-312 -113)"/>
+  <circle id="glass" class="cls-2" cx="97" cy="97" r="83"/>
+</svg>

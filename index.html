@@ -1,0 +1,160 @@
+<!DOCTYPE html>
+<html>
+
+<head>
+  <meta charset="utf-8">
+  <title>Decoder Glass</title>
+  <style type="text/css">
+    p {
+      margin: 0;
+    }
+
+    h1 {
+      margin: 0;
+    }
+
+    h2 {
+      margin: 0;
+    }
+
+    h3 {
+      margin: 0;
+    }
+  </style>
+  <style type="text/css">
+    html,
+    body {
+      width: 100%;
+      height: 100%;
+      margin: 0;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      width: 550px;
+      height: 400px;
+      box-sizing: border-box;
+      background-color: transparent;
+      /* background-image: url('bg.jpg'); */
+    }
+  </style>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+  <!-- <script src="fabric.min.js"></script> -->
+
+
+
+</head>
+
+<body onload="init();">
+  <canvas id="canvas" height="400" width="550"></canvas>
+
+  <!-- <script src="fabric.require.js"></script> -->
+  <!-- <script src="fabric.js"></script> -->
+  <script src="//code.createjs.com/createjs-2013.12.12.min.js"></script>
+  <script>          
+    var stage;
+    var SIZE = 50;
+    var bg;
+    var lens;
+    var update = true;
+
+    function stop() {
+      createjs.Ticker.removeEventListener("tick", tick);
+    }
+
+    function init() {
+      //resize canvas to full width and height
+      var canvas = document.getElementById('canvas');
+      ///canvas.width = window.innerWidth;
+      //canvas.height = window.innerHeight;
+
+      var context = canvas.getContext("2d");
+      context.globalCompositeOperation = "multiply";
+
+      stage = new createjs.Stage(canvas);
+
+     // addCircle(400, 300, SIZE, "#ff0000");
+
+      bg = new Image();
+      bg.onload = addBg;
+      bg.src = "/looking_glass/bg.jpg";
+
+      lens = new Image();
+      lens.onload = addLens(0,0);
+      lens.src = "/looking_glass/lens.svg";
+
+      stage.update();
+    }
+
+    function addCircle(x, y, r, fill) {
+      var circle = new createjs.Shape();
+      circle.graphics.setStrokeStyle(6).beginStroke("#000000").beginFill(fill).drawCircle(0, 0, r);
+      circle.x = x;
+      circle.y = y;
+      circle.name = "circle";
+      circle.on("pressmove", drag);
+      stage.addChild(circle);
+      stage.setChildIndex(circle, stage.getNumChildren() - 1);
+    }
+
+    function addLens(x, y) {
+      var lensImage = new createjs.Bitmap(lens);
+      lensImage.x = x;
+      lensImage.y = y;
+      lensImage.name = "lens";
+      lensImage.on("pressmove", drag);
+
+      lensImage.on("rollover", function () {
+			this.scale = this.originalScale;
+			  //update = true;
+        stage.update();
+      });
+
+      lensImage.on("rollout", function () {
+        this.scale = this.originalScale * 0.5;
+        //update = true;
+        stage.update();
+      });
+
+      lensImage.scale = lensImage.originalScale * 0.5;
+
+      stage.addChild(lensImage);
+      stage.setChildIndex(lensImage, stage.getNumChildren() - 1);
+
+      stage.update();
+    }
+
+    function addBg() {
+      var bgImage = new createjs.Bitmap(bg);
+      stage.addChild(bgImage);
+      stage.setChildIndex(bgImage, stage.getNumChildren() - 3);
+      stage.update();
+    }
+
+    function drag(evt) {
+      // target will be the container that the event listener was added to
+      if (evt.target.name == "lens") {
+        evt.target.x = evt.stageX - 120;
+        evt.target.y = evt.stageY - 120;
+      }
+      else {
+        evt.target.x = evt.stageX;
+        evt.target.y = evt.stageY;
+      }
+
+      // make sure to redraw the stage to show the change
+      stage.update();
+    }
+
+    function tick(event) {
+      // this set makes it so the stage only re-renders when an event handler indicates a change has happened.
+      if (update) {
+        update = false; // only update once
+        stage.update(event);
+      }
+    }
+  </script>
+</body>
+
+</html>
